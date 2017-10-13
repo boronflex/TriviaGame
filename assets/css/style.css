@@ -1,0 +1,22 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+ul {
+	list-style: none;
+	text-align: center;
+	padding: 0;
+}
+li {
+	margin-top: 1%;
+	margin-bottom: 1%;
+}
+h1, h2, h3 {
+	text-align: center;
+}
+#question-box-outer{
+	margin-right: 20%;
+	margin-left: 20%;
+	margin-top: 1%;
+	border: 1px solid black;
+}

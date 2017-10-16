@@ -4,21 +4,160 @@
 	//will need a separate time or a method to use the same timer to count between questions
 	//refer to stopwatch exercise to help set up the timer
 
+var timerDisplay = 10;
+var isQuestion = true;
+
+var intervalQuestion;
+
+function questionAnswerTimer (){
+
+	intervalQuestion = setInterval(decrement, 1000);
+	// console.log(timerDisplay);
+	
+}
+
+function decrement(){
+
+	//before decrement checks whether or not in a question or answer display mode
+	//question is true - answer is false
+
+	if (isQuestion === true){
+
+		timerDisplay -= 1;
+
+		$("#time-remaining-number").text(timerDisplay);
+
+		if (timerDisplay === 0){
+			//once it counts down it switches the value of the timer to show
+			//answer display and starts up timer again
+			isQuestion = false;
+			clearInterval(intervalQuestion);
+			timerDisplay = 15;
+			questionAnswerTimer();
+		}
+
+	} else if (isQuestion === false){
+
+		timerDisplay -= 1;
+
+		$("#time-remaining-number").text(timerDisplay);
+
+		if (timerDisplay === 0){
+			isQuestion = true;
+			clearInterval(intervalQuestion);
+			timerDisplay = 10;
+			questionAnswerTimer();
+		}
+
+	}
+	
+}
+
+questionAnswerTimer();
+
 //build an object as a dictionary of questions and answers
-	//need to figure out how to mark correct answers
-	//pull questions randomly out of dictionary keys and answers out of the list values
-	//apply to question html and buttons
-		//figure out how to get answers to go to random buttons
+//need list of objects here
+
+//random number to retrive question-->
+// var numberMe = 1; -randomnumber here
+//questionBank[1].question = "the question1" -----to call questions
+//questionBank[1].answers[0] = "answer1" -----to call answers
+
+
+//possibly don't need the correct key: value par, just put the correct answer first
+//and the junk answers after, the question answer bank will remain unchanged so 
+//if the button clicked's value doesnt equal answers[0], it will be wrong
+//random sorting won't interfere with this
+
+//question bank, this looks pretty good- happy with this
+var questionBank = [
+
+	{question: "the question0",
+	answers: ["answer1","answer2","answer3","answer4"]},
+
+	{question: "the question1",
+	answers: ["answer1","answer2","answer3","answer4"]},
+
+	{question: "the question2",
+	answers: ["answer1","answer2","answer3","answer4"]},
+
+	{question: "the question3",
+	answers: ["answer1","answer2","answer3","answer4"]},
+
+	{question:  "the question4",
+	answers: ["answer1","answer2","answer3","answer4"]},
+
+	{question: "the question5", 
+	answers: ["answer1","answer2","answer3","answer4"]},
+
+	{question: "the question6",
+	answers: ["answer1","answer2","answer3","answer4"]},
+
+	{question: "the question7",
+	answers: ["answer1","answer2","answer3","answer4"]},
+
+	{question: "the question8",
+	answers: ["answer1","answer2","answer3","answer4"]},
+];
+
+//gets an array to in random order to call answers from the question bank
+//instructions don't specify random questions, but the answers should be mixed up
+
+function jumbleAnswers (){
+
+	answerDisplayOrder = [];
+
+	var answerNumberList = [0,1,2,3];//i think im going to need to pick a number of this list randomly 
+	
+	do {
+		var arrayLen = answerNumberList.length;
+		var random = Math.floor((Math.random() * arrayLen)+0);
+
+		answerDisplayOrder.push(answerNumberList[random]);
+		answerNumberList.splice(answerNumberList.indexOf(answerNumberList[random]), 1);
+	}
+
+	while (answerNumberList.length > 1);
+
+	answerDisplayOrder.push(answerNumberList[0]);
+
+	return answerDisplayOrder;
+
+}
+
+//pull questions randomly out of dictionary keys and answers out of the list values
+//apply to question html and buttons
+	//gets random answers to go to buttons
+
+//this is functional, but the question variable needs editing
+function displayQuestionAnswers(){
+
+	var questionNumber = questionBank[1];//this will need to be edited and come
+	//from another method, the timer will have to move this forward still
+
+	$("#question-text").text(questionNumber.question)
+
+	var randomAnswerArray = jumbleAnswers();
+
+	$("#answer1").text(questionNumber.answers[randomAnswerArray[0]]);
+	$("#answer2").text(questionNumber.answers[randomAnswerArray[1]]);
+	$("#answer3").text(questionNumber.answers[randomAnswerArray[2]]);
+	$("#answer4").text(questionNumber.answers[randomAnswerArray[3]]);
+
+}
 
 
 //get user input from buttons
 	//when question is answered correctly store +1 to correct answers
+		//the correct answer will be the = to answer array index [0]
+			//the button dislays are random
 	//when question is answered incorrectly store +1 to incorrect answers
 
 //set up screen for correct answer
 //set up screen for incorrect answer
 //set up screen for time running out
 	//needs to cover up main answer div
+	// jquery hide and show methods will probably work here
 	//possibly other hidden divs that cover up the main one
 	//could use position relative an z score to set up
 

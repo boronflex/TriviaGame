@@ -28,6 +28,10 @@ function decrement(){
 
 	if (isQuestion === true){
 
+		$("#correct-answer-screen").hide();
+		$("incorrect-answer-screen").hide();
+		$("time-runout-screen").show();
+
 		timerDisplay -= 1;
 
 		$("#time-remaining-number").text(timerDisplay);
@@ -39,6 +43,7 @@ function decrement(){
 			clearInterval(intervalQuestion);
 			timerDisplay = 15;
 			questionAnswerTimer();
+			currentQuestion += 1; //move to the next question
 		}
 
 	} else if (isQuestion === false){
@@ -51,7 +56,9 @@ function decrement(){
 			isQuestion = true;
 			clearInterval(intervalQuestion);
 			timerDisplay = 10;
+			displayQuestionAnswers();//once the inbetween timer runs out grab a new question
 			questionAnswerTimer();
+
 		}
 
 	}
@@ -107,6 +114,13 @@ var questionBank = [
 //gets an array to in random order to call answers from the question bank
 //instructions don't specify random questions, but the answers should be mixed up
 
+var currentQuestion = 0;
+var questionNumber = questionBank[currentQuestion];
+var rightAnswer = questionBank[currentQuestion].answers[0];
+
+var correctGuesses = 0;
+var wrongGuesses = 0;
+
 function jumbleAnswers (){
 
 	answerDisplayOrder = [];
@@ -136,9 +150,6 @@ function jumbleAnswers (){
 //this is functional, but the question variable needs editing
 function displayQuestionAnswers(){
 
-	var questionNumber = questionBank[1];//this will need to be edited and come
-	//from another method, the timer will have to move this forward still
-
 	$("#question-text").text(questionNumber.question)
 
 	var randomAnswerArray = jumbleAnswers();
@@ -156,6 +167,23 @@ function displayQuestionAnswers(){
 		//the correct answer will be the = to answer array index [0]
 			//the button dislays are random
 	//when question is answered incorrectly store +1 to incorrect answers
+function getAnswer (){
+
+	$(".answer-button").click(function(){
+		var clickedAnswer = this.text();
+
+		isQuestion = false;//this should set the inbetween timer
+
+		if (clickedAnswer === rightAnswer){
+			//correct answer screen and timer
+			$("#correct-answer-screen").show();
+		} else if(clickedAnswer === rightAnswer){
+			//wrong answer screen and timer;
+			$("incorrect-answer-screen").show();
+		}
+	});
+
+}
 
 //set up screen for correct answer
 //set up screen for incorrect answer

@@ -12,9 +12,23 @@
 
 	<div id="body-background">
 		
-		<div id="correct-answer-screen"></div>
-		<div id="incorrect-answer-screen"></div>
-		<div id="time-runout-screen"></div>
+		<div id="correct-answer-screen">
+			<h1>Correct! congratulations</h1>
+		</div>
+		<div id="incorrect-answer-screen">
+			<h1>Wrong!  the correct answer is:</h1>
+			<h3 class="show-correct-answer"></h3>
+		</div>
+		<div id="time-runout-screen">
+			<h1>Wrong!  the correct answer is:</h1>
+			<h3 class="show-correct-answer"></h3>
+		</div>
+		<div id="game-complete-screen">
+			<h1>Game complete, here's how you did:</h1>
+			<h3 id="number-correct-answers"></h3>
+			<h3 id="number-wrong-answers"></h3>
+			<button id="restart-game">Restart</button>
+		</div>
 
 		<h3 id="clickanywhere">click Anywhere to start game</h3>
 
@@ -29,10 +43,10 @@
 			<h2 id="question-text">Some Question</h2>
 
 			<ul>
-				<li><button id="answer1">answer 1</button></li>
-				<li><button id="answer2">answer 2</button></li>
-				<li><button id="answer3">answer 3</button></li>
-				<li><button id="answer4">answer 4</button></li>
+				<li><button class="answer-button" id="answer1">answer 1</button></li>
+				<li><button class="answer-button" id="answer2">answer 2</button></li>
+				<li><button class="answer-button" id="answer3">answer 3</button></li>
+				<li><button class="answer-button" id="answer4">answer 4</button></li>
 			</ul>
 
 			<br>

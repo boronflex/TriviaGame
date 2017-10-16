@@ -20,3 +20,43 @@ h1, h2, h3 {
 	margin-top: 1%;
 	border: 1px solid black;
 }
+#correct-answer-screen{
+	visibility: hidden;
+	position: fixed;
+	width:60%;
+	height: 80%;
+	background-color: green;
+	margin-right: 20%;
+	margin-left: 20%;
+	border: 1px solid black;
+}
+#incorrect-answer-screen{
+	visibility: hidden;	
+	position: fixed;
+	width:60%;
+	height: 80%;
+	background-color: red;
+	margin-right: 20%;
+	margin-left: 20%;
+	border: 1px solid black;
+}
+#time-runout-screen{
+	visibility: hidden;
+	position: fixed;
+	width:60%;
+	height: 80%;
+	background-color: yellow;
+	margin-right: 20%;
+	margin-left: 20%;
+	border: 1px solid black;
+}
+#game-complete-screen{
+	visibility: hidden;
+	position: fixed;
+	width:60%;
+	height: 80%;
+	background-color: blue;
+	margin-right: 20%;
+	margin-left: 20%;
+	border: 1px solid black;
+}

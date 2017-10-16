@@ -1,3 +1,8 @@
+$(document).click(function(){
+  $("#clickanywhere").hide();
+  questionAnswerTimer();
+});
+
 //TODO:
 
 //get timer working counting down and displaying in the span set up html
@@ -53,7 +58,6 @@ function decrement(){
 	
 }
 
-questionAnswerTimer();
 
 //build an object as a dictionary of questions and answers
 //need list of objects here

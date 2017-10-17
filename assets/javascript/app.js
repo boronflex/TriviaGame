@@ -1,6 +1,7 @@
 $(document).click(function(){
   $("#clickanywhere").hide();
   gameLogic.questionAnswerTimer();
+  view.displayQuestionAnswers(); // this is still in the wrong place
 });
 
 $(".answer-button").click(function(){
@@ -18,9 +19,10 @@ $(".answer-button").click(function(){
 var gameLogic = {
 	
 	timerDisplay: 10,
-	breakTimer: 5,
 
-	isQuestion: false,
+	// breakTimer: 5,
+
+	isQuestion: true,
 
 	clockRunning: false,//copied from stopwatch activity
 
@@ -33,19 +35,20 @@ var gameLogic = {
 		//if the its in a question portion
 		//call question timer
 
-		if (!gameLogic.clockRunning && isQuestion === true) {//copied from stopwatch activity
+		if (!gameLogic.clockRunning) {//copied from stopwatch activity
 	        
 	        gameLogic.intervalQuestion = setInterval(gameLogic.decrementQuestion, 1000);
 	        gameLogic.clockRunning = true;
+	    }
 
 	    //if its in the break portion
 	    //call break timer
 
-	    } else if (!gameLogic.clockRunning && isQuestion === false){
-	    	gameLogic.intervalQuestion = setInterval(gameLogic.decrementBreak, 1000);
-	        gameLogic.clockRunning = true;
-	    }
-	    //
+	    // if (!gameLogic.clockRunning){
+	    // 	gameLogic.intervalQuestion = setInterval(gameLogic.decrementBreak, 1000);
+	    //     gameLogic.clockRunning = true;
+	    // }
+	    // //
 		
 	},
 
@@ -56,70 +59,103 @@ var gameLogic = {
 
 		//if the question isnt answered
 
-		if (gameLogic.answered === false){
+		if (gameLogic.isQuestion===true){
+
+			console.log("in question block")
+
+			if (gameLogic.answered === false){
+
+				gameLogic.timerDisplay -= 1;
+
+				$("#time-remaining-number").text(gameLogic.timerDisplay);
+
+				//show the question until time runs out
+					//if the time runs out
+						
+				if (gameLogic.timerDisplay === 0){
+
+					gameLogic.isQuestion = false;
+					gameLogic.clockRunning = false;
+					gameLogic.timerDisplay = 5;
+					gameLogic.currentQuestion += 1; //move to the next question
+					clearInterval(gameLogic.intervalQuestion);
+					//show a modal saying th time ran out and the answer
+					view.timeUpScreen();
+					//go to the break timer
+					gameLogic.questionAnswerTimer();
+
+				}
+
+				if (gameLogic.answered === true){
+					//or show the question until an answer is registered
+						//if the question is answered correctly
+							//go to the break timer
+						//if the question is answered incorrectly
+							//go to the break timer
+					gameLogic.timerDisplay = 0;
+					gameLogic.isQuestion = false;
+					gameLogic.clockRunning = false;
+					gameLogic.timerDisplay = 5;
+					gameLogic.currentQuestion += 1; //move to the next question
+					clearInterval(gameLogic.intervalQuestion);
+					//go to the break timer
+					gameLogic.questionAnswerTimer();
+
+				}
+			}
+
+		} else if(gameLogic.isQuestion===false){
+
+			console.log("in decrement break")
 
 			gameLogic.timerDisplay -= 1;
 
 			$("#time-remaining-number").text(gameLogic.timerDisplay);
 
-			//show the question until time runs out
-				//if the time runs out
-					
 			if (gameLogic.timerDisplay === 0){
-
-				gameLogic.isQuestion = false;
+				
+				gameLogic.timerDisplay = 10;
+				gameLogic.isQuestion = true;
 				gameLogic.clockRunning = false;
-				gameLogic.breakTimer = 5;
-				gameLogic.currentQuestion += 1; //move to the next question
+
 				clearInterval(gameLogic.intervalQuestion);
-				//show a modal saying th time ran out and the answer
-				view.timeUpScreen();
-				//go to the break timer
+				
+				view.displayQuestionAnswers();//once the inbetween timer runs out grab a new question
 				gameLogic.questionAnswerTimer();
-
+				view.closeAllModals();
 			}
-
-		} else if (gameLogic.answered === true){
-			//or show the question until an answer is registered
-				//if the question is answered correctly
-					//go to the break timer
-				//if the question is answered incorrectly
-					//go to the break timer
-			gameLogic.isQuestion = false;
-			gameLogic.clockRunning = false;
-			gameLogic.breakTimer = 5;
-			gameLogic.currentQuestion += 1; //move to the next question
-			clearInterval(gameLogic.intervalQuestion);
-			//go to the break timer
-			gameLogic.questionAnswerTimer();
-			
 
 		}
 		
 	},
 
-	decrementBreak: function(){
+	// decrementBreak: function(){
 
-		//reset the question timer
-		//count down until zero
-		//clear out any modals
-		//go back to question timer
+	// 	//reset the question timer
+	// 	//count down until zero
+	// 	//clear out any modals
+	// 	//go back to question timer
 
-		gameLogic.timerDisplay -= 1;
+	// 	gameLogic.breakTimer -= 1;
 
-		$("#time-remaining-number").text(gameLogic.timerDisplay);
+	// 	console.log("in decrement break")
 
-		if (gameLogic.timerDisplay === 0){
-			gameLogic.isQuestion = true;
-			gameLogic.clockRunning = false;
-			clearInterval(gameLogic.intervalQuestion);
-			gameLogic.timerDisplay = 10;
-			view.displayQuestionAnswers();//once the inbetween timer runs out grab a new question
-			gameLogic.questionAnswerTimer();
-			view.closeAllModals();
-		}
+	// 	$("#time-remaining-number").text(gameLogic.breakTimer);
 
-	},
+	// 	if (gameLogic.breakTimer === 0){
+			
+	// 		gameLogic.timerDisplay = 10;
+	// 		gameLogic.isQuestion = true;
+	// 		gameLogic.clockRunning = false;
+
+	// 		clearInterval(gameLogic.intervalQuestion);
+			
+	// 		view.displayQuestionAnswers();//once the inbetween timer runs out grab a new question
+	// 		gameLogic.questionAnswerTimer();
+	// 		view.closeAllModals();
+	// 	}
+
+	// },
 
 
 //build an object as a dictionary of questions and answers
@@ -294,9 +330,11 @@ function getAnswer (){
 
 		if (clickedAnswer === rightAnswer){
 			//correct answer screen and timer
+			gameLogic.questionAnswerTimer();
 			view.correctAnswerScreen();
 		} else if(clickedAnswer !== rightAnswer){
 			//wrong answer screen and timer;
+			gameLogic.questionAnswerTimer();
 			view.wrongAnswerScreen();
 		}
 

@@ -1,8 +1,11 @@
 $(document).click(function(){
   $("#clickanywhere").hide();
-  displayQuestionAnswers();
+  view.displayQuestionAnswers();
   gameLogic.questionAnswerTimer();
+  getAnswer();
 });
+
+	
 
 //TODO:
 
@@ -17,6 +20,8 @@ var gameLogic = {
 	clockRunning: false,//copied from stopwatch activity
 
 	intervalQuestion: 0,
+
+	answered: false,//flag for answered before time up
 
 	questionAnswerTimer: function(){
 
@@ -35,15 +40,25 @@ var gameLogic = {
 
 		if (gameLogic.isQuestion === true){
 
-			$("#correct-answer-screen").hide();
-			$("incorrect-answer-screen").hide();
-			$("time-runout-screen").show();
+			view.closeAllModals();
 
 			gameLogic.timerDisplay -= 1;
 
 			$("#time-remaining-number").text(gameLogic.timerDisplay);
 
-			if (gameLogic.timerDisplay === 0){
+			//if the question is answered early
+			if (gameLogic.answered === true){
+
+				gameLogic.isQuestion = false;
+				gameLogic.clockRunning = false;
+				clearInterval(gameLogic.intervalQuestion);
+				gameLogic.timerDisplay = 5;
+				gameLogic.questionAnswerTimer();
+				gameLogic.currentQuestion += 1;
+				view.correctAnswerScreen();
+
+			//if time runs out
+			} else if (gameLogic.timerDisplay === 0 && gameLogic.answered === false){
 				//once it counts down it switches the value of the timer to show
 				//answer display and starts up timer again
 				gameLogic.isQuestion = false;
@@ -52,6 +67,7 @@ var gameLogic = {
 				gameLogic.timerDisplay = 5;
 				gameLogic.questionAnswerTimer();
 				gameLogic.currentQuestion += 1; //move to the next question
+				view.timeUpScreen();
 			}
 
 		} else if (gameLogic.isQuestion === false){
@@ -65,7 +81,7 @@ var gameLogic = {
 				gameLogic.clockRunning = false;
 				clearInterval(gameLogic.intervalQuestion);
 				gameLogic.timerDisplay = 10;
-				displayQuestionAnswers();//once the inbetween timer runs out grab a new question
+				view.displayQuestionAnswers();//once the inbetween timer runs out grab a new question
 				gameLogic.questionAnswerTimer();
 			}
 
@@ -92,31 +108,31 @@ var gameLogic = {
 	questionBank: [
 
 		{question: "the question0",
-		answers: ["answer1","answer2","answer3","answer4"]},
+		answers: ["right","answer2","answer3","answer4"]},
 
 		{question: "the question1",
-		answers: ["answer1","answer2","answer3","answer4"]},
+		answers: ["right","answer2","answer3","answer4"]},
 
 		{question: "the question2",
-		answers: ["answer1","answer2","answer3","answer4"]},
+		answers: ["right","answer2","answer3","answer4"]},
 
 		{question: "the question3",
-		answers: ["answer1","answer2","answer3","answer4"]},
+		answers: ["right","answer2","answer3","answer4"]},
 
 		{question:  "the question4",
-		answers: ["answer1","answer2","answer3","answer4"]},
+		answers: ["right","answer2","answer3","answer4"]},
 
 		{question: "the question5", 
-		answers: ["answer1","answer2","answer3","answer4"]},
+		answers: ["right","answer2","answer3","answer4"]},
 
 		{question: "the question6",
-		answers: ["answer1","answer2","answer3","answer4"]},
+		answers: ["right","answer2","answer3","answer4"]},
 
 		{question: "the question7",
-		answers: ["answer1","answer2","answer3","answer4"]},
+		answers: ["right","answer2","answer3","answer4"]},
 
 		{question: "the question8",
-		answers: ["answer1","answer2","answer3","answer4"]}
+		answers: ["right","answer2","answer3","answer4"]}
 	],
 
 //gets an array to in random order to call answers from the question bank
@@ -147,8 +163,11 @@ var gameLogic = {
 
 		return answerDisplayOrder;
 
-	},
+	},	
+	
+}
 
+var view = {
 	//set up screen for correct answer
 	//set up screen for incorrect answer
 	//set up screen for time running out
@@ -164,69 +183,65 @@ var gameLogic = {
 	//could probably use list of functions here but there were context problems
 	//with he question bank
 	correctAnswerScreen: function(){
-		if(gameLogic.isQuestion === false){
+		// if(gameLogic.isQuestion === false){
 			$("#correct-answer-screen").css("display","block");
-		} else {
-			$("#correct-answer-screen").css("display","none");
-		}
-		
+		// } else {
+		// 	$("#correct-answer-screen").css("display","none");
+		// }	
 	},
 	wrongAnswerScreen: function(){
-		if(gameLogic.isQuestion === false){
+		// if(gameLogic.isQuestion === false){
 			$("#incorrect-answer-screen").css("display","block");
-		} else {
-			$("#incorrect-answer-screen").css("display","none");
-		}
+		// } else {
+		// 	$("#incorrect-answer-screen").css("display","none");
+		// }
 		
 	},
 	timeUpScreen: function(){
-		if(gameLogic.isQuestion === false){
+		// if(gameLogic.isQuestion === false){
 			$("#time-runout-screen").css("display","block");
-		} else {
-			$("#time-runout-screen").css("display","none");
-		}
+		// } else {
+		// 	$("#time-runout-screen").css("display","none");
+		// }
 		
 	},
 	gameOverScreen: function(){
-		if(gameLogic.isQuestion === false){
+		// if(gameLogic.isQuestion === false){
 			$("#game-complete-screen").css("display","block");
-		} else {
-			$("#game-complete-screen").css("display","none");
-		}
+		// } else {
+		// 	$("#game-complete-screen").css("display","none");
+		// }
 		
-	}	
-	
-}
+	},
 
-function testModal(){
-	$("#correct-answer-screen").css("display","block");
-}
+	closeAllModals: function(){
+		$("#correct-answer-screen").css("display","none");
+		$("#incorrect-answer-screen").css("display","none");
+		$("#time-runout-screen").css("display","none");
+		$("#game-complete-screen").css("display","none");
+	},
 
-function testModalOff(){
-	$("#correct-answer-screen").css("display","none");
-}
-
-//pull questions randomly out of dictionary keys and answers out of the list values
-//apply to question html and buttons
+	//pull questions randomly out of dictionary keys and answers out of the list values
+	//apply to question html and buttons
 	//gets random answers to go to buttons
 
-//this is functional, but the question variable needs editing
-function displayQuestionAnswers(){
+	//this is functional, but the question variable needs editing
+	displayQuestionAnswers: function (){
 
-	var questionNumber = gameLogic.questionBank[gameLogic.currentQuestion];//gameLogic.currentQuestion
-	
+		var questionNumber = gameLogic.questionBank[gameLogic.currentQuestion];//gameLogic.currentQuestion
+		
 
-	$("#question-text").text(questionNumber.question)
+		$("#question-text").text(questionNumber.question)
 
-	var randomAnswerArray = gameLogic.jumbleAnswers();
+		var randomAnswerArray = gameLogic.jumbleAnswers();
 
-	$("#answer1").text(questionNumber.answers[randomAnswerArray[0]]);
-	$("#answer2").text(questionNumber.answers[randomAnswerArray[1]]);
-	$("#answer3").text(questionNumber.answers[randomAnswerArray[2]]);
-	$("#answer4").text(questionNumber.answers[randomAnswerArray[3]]);
+		$("#answer1").text(questionNumber.answers[randomAnswerArray[0]]);
+		$("#answer2").text(questionNumber.answers[randomAnswerArray[1]]);
+		$("#answer3").text(questionNumber.answers[randomAnswerArray[2]]);
+		$("#answer4").text(questionNumber.answers[randomAnswerArray[3]]);
 
+	}
 }
-
 
 //get user input from buttons
 	//when question is answered correctly store +1 to correct answers
@@ -239,17 +254,20 @@ function getAnswer (){
 
 	$(".answer-button").click(function(){
 
-		var clickedAnswer = this.text();
+		var clickedAnswer = $(this).text();
+		console.log(clickedAnswer);
 
 		gameLogic.isQuestion = false;//this should set the inbetween timer
+		gameLogic.answered = true;
 
 		if (clickedAnswer === rightAnswer){
 			//correct answer screen and timer
-			$("#correct-answer-screen").show();
-		} else if(clickedAnswer === rightAnswer){
+			view.correctAnswerScreen();
+		} else if(clickedAnswer !== rightAnswer){
 			//wrong answer screen and timer;
-			$("incorrect-answer-screen").show();
+			view.wrongAnswerScreen();
 		}
+
 	});
 
 }

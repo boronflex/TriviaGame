@@ -15,11 +15,25 @@ h1, h2, h3 {
 	text-align: center;
 }
 
+#restart-game{
+	display: block;
+	margin: 0 auto;
+}
+
 #question-box-outer{
+    position: fixed;
+	z-index: 0;
+	width:60%;
+	height: auto;
+	margin-top: 2%;
 	margin-right: 20%;
 	margin-left: 20%;
-	margin-top: 1%;
 	border: 1px solid black;
+}
+#click-to-start{
+	display: none; /* Hidden by default */
+	background-color: white;
+	text-align: center;
 }
 #correct-answer-screen{
 	display: none; /* Hidden by default */
@@ -43,8 +57,8 @@ h1, h2, h3 {
     position: fixed;
 	z-index: 1;
 	width:60%;
-	height: 60%;
-	margin-top: 20%;
+	height: 75%;
+	margin-top: 2%;
 	margin-right: 20%;
 	margin-left: 20%;
 	border: 1px solid black;

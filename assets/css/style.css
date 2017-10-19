@@ -1,6 +1,7 @@
 body {
 	margin: 0;
 	padding: 0;
+	background-image: url('../images/51R9Z6528WL.jpg');
 }
 ul {
 	list-style: none;
@@ -10,9 +11,23 @@ ul {
 li {
 	margin-top: 1%;
 	margin-bottom: 1%;
+	font-family: 'Julius Sans One', sans-serif;
 }
 h1, h2, h3 {
 	text-align: center;
+	font-family: 'Julius Sans One', sans-serif;
+	font-weight: bold;
+	margin-top: 2%;
+	margin-bottom: 2%;
+}
+h1{
+	font-size: 1.75em;
+}
+button{
+	width: 40%;
+	border-radius: 5px;
+	font-family: 'Julius Sans One', sans-serif;
+	font-weight: bolder;
 }
 
 #restart-game{
@@ -29,27 +44,32 @@ h1, h2, h3 {
 	margin-right: 20%;
 	margin-left: 20%;
 	border: 1px solid black;
+	border-radius: 25px;
+	background-color: #ffe699;
 }
 #click-to-start{
 	display: none; /* Hidden by default */
-	background-color: white;
+	background-color: #ffffff;
 	text-align: center;
 }
 #correct-answer-screen{
 	display: none; /* Hidden by default */
-	background-color: green;
+	background-color: #99ff99;
 }
 #incorrect-answer-screen{
 	display: none; /* Hidden by default */
-	background-color: red;
+	background-color: #ff5050;
 }
 #time-runout-screen{
 	display: none; /* Hidden by default */
-	background-color: yellow;
+	background-color: #ffffb3;
 }
 #game-complete-screen{
 	display: none; /* Hidden by default */
-	background-color: blue;
+	background-color: #ccffff;
+}
+.modal-text{
+	margin-top: 15%;
 }
 
 /*modal css from w3schools*/
@@ -57,9 +77,14 @@ h1, h2, h3 {
     position: fixed;
 	z-index: 1;
 	width:60%;
-	height: 75%;
+	height: 60%;
 	margin-top: 2%;
 	margin-right: 20%;
 	margin-left: 20%;
 	border: 1px solid black;
+	border-radius: 25px;
+}
+
+button:hover { 
+    background-color: blue;
 }
